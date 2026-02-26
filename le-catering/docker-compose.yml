@@ -1,0 +1,53 @@
+
+
+services:
+  mariadb_container:
+    image: mariadb:10.4
+    container_name: mariadb_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: restaurant
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/restaurant.sql:/docker-entrypoint-initdb.d/restaurant.sql
+    networks:
+      - app-network
+    ports:
+      - "3306:3306"
+
+  backend_container:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: backend_container
+    restart: always
+    environment:
+      DB_HOST: mariadb_container
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      DB_NAME: restaurant
+    depends_on:
+      - mariadb_container
+    networks:
+      - app-network
+    ports:
+      - "5000:5000"
+
+  frontend_container:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: frontend_container
+    restart: always
+    networks:
+      - app-network
+    ports:
+      - "8082:80"
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge
