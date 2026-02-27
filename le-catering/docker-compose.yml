@@ -1,53 +1,42 @@
-
+version: "3.9"
 
 services:
-  mariadb_container:
-    image: mariadb:10.4
-    container_name: mariadb_container
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: restaurant
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./db/restaurant.sql:/docker-entrypoint-initdb.d/restaurant.sql
-    networks:
-      - app-network
+  frontend:
+    build: ./frontend
+    container_name: frontend
     ports:
-      - "3306:3306"
-
-  backend_container:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
-    container_name: backend_container
-    restart: always
-    environment:
-      DB_HOST: mariadb_container
-      DB_USER: root
-      DB_PASSWORD: rootpassword
-      DB_NAME: restaurant
+      - "3000:3000"
     depends_on:
-      - mariadb_container
+      - backend
     networks:
-      - app-network
-    ports:
-      - "5000:5000"
+      - frontend_net
 
-  frontend_container:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: frontend_container
-    restart: always
-    networks:
-      - app-network
+  backend:
+    build: ./backend
+    container_name: backend
     ports:
-      - "8082:80"
+      - "5001:5000"
+    depends_on:
+      - db
+    networks:
+      - frontend_net
+      - backend_net
+
+  db:
+    image: postgres:15
+    container_name: database
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appdb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend_net
 
 volumes:
   db_data:
 
 networks:
-  app-network:
-    driver: bridge
+  frontend_net:
+  backend_net:

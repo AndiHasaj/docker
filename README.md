@@ -13,14 +13,8 @@
 
 
 
-###### Liste de fichiers et images contenues :
-
-
-
 |*NOTE : Le site en lui - même est basé sur un Template provenant de **w3schools**. Vous pouvez visualiser ce Template ici : https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css\_templates\_gourmet\_catering\&stacked=h*|
 |-|
-
-###### 
 
 
 
@@ -39,4 +33,8 @@ Ce projet a été réalisé par :
 ###### ***Lien d'accès au repository GitHub :***<i> https://github.com/AndiHasaj/docker</i>
 
 ###### ***Lien d'accès au repository Docker HUB :***<i> https://hub.docker.com/repository/docker/ahasaj/soutenance</i>
+
+
+
+<i>Allez dans le dossier "documentation" pour en savoir plus.</i>
 
